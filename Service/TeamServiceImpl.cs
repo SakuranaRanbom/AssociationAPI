@@ -1,4 +1,9 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.EntityFrameworkCore;
 using RfidAPI.Data;
 using RfidAPI.Models;
 
@@ -64,6 +69,16 @@ namespace RfidAPI.Service
                 return false;
             }
             throw new System.NotImplementedException();
+        }
+
+        public async Task<ActionResult<IEnumerable<Team>>> getTeams()
+        {
+            return await _dataContext.Teams.ToListAsync();
+        }
+
+        public async Task<ActionResult<IEnumerable<Team>>> getTeamByName(string name)
+        {
+            return await _dataContext.Teams.Where(b => b.teamName.Contains(name)).ToListAsync();
         }
     }
 }
