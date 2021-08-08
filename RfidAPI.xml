@@ -1,22 +1,22 @@
 <?xml version="1.0"?>
 <doc>
     <assembly>
-        <name>RfidAPI</name>
+        <name>TeamAPI</name>
     </assembly>
     <members>
-        <member name="T:RfidAPI.Controllers.AuthenticateController">
+        <member name="T:TeamAPI.Controllers.AuthenticateController">
             <summary>
             登录注册验证
             </summary>
         </member>
-        <member name="M:RfidAPI.Controllers.AuthenticateController.AddUserAsync(RfidAPI.Models.RegisterUser)">
+        <member name="M:TeamAPI.Controllers.AuthenticateController.AddUserAsync(TeamAPI.Models.RegisterUser)">
             <summary>
             注册用户
             </summary>
             <param name="用户注册模型"></param>
             <returns></returns>
         </member>
-        <member name="M:RfidAPI.Controllers.AuthenticateController.GenerateTokenAsync(RfidAPI.Models.LoginUser)">
+        <member name="M:TeamAPI.Controllers.AuthenticateController.GenerateTokenAsync(TeamAPI.Models.LoginUser)">
             <summary>
             用户登录
             </summary>

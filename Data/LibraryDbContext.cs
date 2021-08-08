@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using RfidAPI.Models;
+using TeamAPI.Models;
 
-namespace RfidAPI.Data
+namespace TeamAPI.Data
 {
     public class LibraryDbContext : IdentityDbContext<IUser, IRole, string>
     {

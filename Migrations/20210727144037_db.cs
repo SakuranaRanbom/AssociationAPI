@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace RfidAPI.Migrations
+namespace TeamAPI.Migrations
 {
     public partial class db : Migration
     {

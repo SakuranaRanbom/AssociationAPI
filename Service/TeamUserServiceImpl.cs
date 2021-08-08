@@ -1,8 +1,9 @@
-﻿using System.Linq;
-using RfidAPI.Data;
-using RfidAPI.Models;
+﻿using System;
+using System.Linq;
+using TeamAPI.Data;
+using TeamAPI.Models;
 
-namespace RfidAPI.Service
+namespace TeamAPI.Service
 {
     public class TeamUserServiceImpl : TeamUserService
     {
@@ -127,6 +128,50 @@ namespace RfidAPI.Service
                 return false;
             }
             throw new System.NotImplementedException();
+        }
+
+        public bool IsAdmin(string userID)
+        {
+           
+           var res =  _context.TeamUsers.FirstOrDefault(s => s.UserID == userID && s.level == PerLevel.admin);
+           
+           if (res == null)
+           {
+               
+               return false;
+           }
+           else
+           {
+               return true;
+           }
+        }
+        public bool HasTeam(string userID)
+        {
+            
+            var res =  _context.TeamUsers.FirstOrDefault(s => s.UserID == userID);
+           
+            if (res == null)
+            {
+               
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+        
+        public int? GetTeamID(string userID)
+        {
+            var res = _context.TeamUsers.FirstOrDefault(s => s.UserID == userID);
+            if (res != null)
+            {
+                return res.TeamID;
+            }
+            else
+            {
+                return null;
+            }
         }
     }
 }

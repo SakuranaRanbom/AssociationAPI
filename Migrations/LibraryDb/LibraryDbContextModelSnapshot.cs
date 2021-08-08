@@ -3,9 +3,9 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using RfidAPI.Data;
+using TeamAPI.Data;
 
-namespace RfidAPI.Migrations.LibraryDb
+namespace TeamAPI.Migrations.LibraryDb
 {
     [DbContext(typeof(LibraryDbContext))]
     partial class LibraryDbContextModelSnapshot : ModelSnapshot
@@ -118,7 +118,7 @@ namespace RfidAPI.Migrations.LibraryDb
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("RfidAPI.Models.IRole", b =>
+            modelBuilder.Entity("TeamAPI.Models.IRole", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("TEXT");
@@ -144,7 +144,7 @@ namespace RfidAPI.Migrations.LibraryDb
                     b.ToTable("AspNetRoles");
                 });
 
-            modelBuilder.Entity("RfidAPI.Models.IUser", b =>
+            modelBuilder.Entity("TeamAPI.Models.IUser", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("TEXT");
@@ -210,7 +210,7 @@ namespace RfidAPI.Migrations.LibraryDb
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
-                    b.HasOne("RfidAPI.Models.IRole", null)
+                    b.HasOne("TeamAPI.Models.IRole", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -219,7 +219,7 @@ namespace RfidAPI.Migrations.LibraryDb
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("RfidAPI.Models.IUser", null)
+                    b.HasOne("TeamAPI.Models.IUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -228,7 +228,7 @@ namespace RfidAPI.Migrations.LibraryDb
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("RfidAPI.Models.IUser", null)
+                    b.HasOne("TeamAPI.Models.IUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -237,13 +237,13 @@ namespace RfidAPI.Migrations.LibraryDb
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
                 {
-                    b.HasOne("RfidAPI.Models.IRole", null)
+                    b.HasOne("TeamAPI.Models.IRole", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("RfidAPI.Models.IUser", null)
+                    b.HasOne("TeamAPI.Models.IUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -252,7 +252,7 @@ namespace RfidAPI.Migrations.LibraryDb
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("RfidAPI.Models.IUser", null)
+                    b.HasOne("TeamAPI.Models.IUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)

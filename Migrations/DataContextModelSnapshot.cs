@@ -3,9 +3,9 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using RfidAPI.Data;
+using TeamAPI.Data;
 
-namespace RfidAPI.Migrations
+namespace TeamAPI.Migrations
 {
     [DbContext(typeof(DataContext))]
     partial class DataContextModelSnapshot : ModelSnapshot
@@ -16,7 +16,7 @@ namespace RfidAPI.Migrations
             modelBuilder
                 .HasAnnotation("ProductVersion", "5.0.4");
 
-            modelBuilder.Entity("RfidAPI.Models.Team", b =>
+            modelBuilder.Entity("TeamAPI.Models.Team", b =>
                 {
                     b.Property<int?>("teamID")
                         .ValueGeneratedOnAdd()
@@ -39,10 +39,11 @@ namespace RfidAPI.Migrations
                     b.ToTable("Teams");
                 });
 
-            modelBuilder.Entity("RfidAPI.Models.TeamUser", b =>
+            modelBuilder.Entity("TeamAPI.Models.TeamUser", b =>
                 {
-                    b.Property<string>("TeamUserID")
-                        .HasColumnType("TEXT");
+                    b.Property<int?>("TeamUserID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("TeamID")
                         .HasColumnType("INTEGER");

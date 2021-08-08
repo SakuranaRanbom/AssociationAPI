@@ -9,8 +9,8 @@ using TeamAPI.Data;
 namespace TeamAPI.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20210727144037_db")]
-    partial class db
+    [Migration("20210808124108_v2")]
+    partial class v2
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -43,8 +43,9 @@ namespace TeamAPI.Migrations
 
             modelBuilder.Entity("TeamAPI.Models.TeamUser", b =>
                 {
-                    b.Property<string>("TeamUserID")
-                        .HasColumnType("TEXT");
+                    b.Property<int?>("TeamUserID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("TeamID")
                         .HasColumnType("INTEGER");

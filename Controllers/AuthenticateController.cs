@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
@@ -11,9 +12,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using RfidAPI.Models;
+using Newtonsoft.Json;
+using SQLitePCL;
+using TeamAPI.Models;
 
-namespace RfidAPI.Controllers
+namespace TeamAPI.Controllers
 {   
     /// <summary>
     /// 登录注册验证
@@ -26,7 +29,9 @@ namespace RfidAPI.Controllers
             RoleManager<IRole> roleManager,
             IConfiguration configuration)
         {
+            
             UserManager = userManager;
+            
             RoleManager = roleManager;
             Configuration = configuration;
         }
@@ -35,14 +40,17 @@ namespace RfidAPI.Controllers
         public RoleManager<IRole> RoleManager { get; }
         public  UserManager<IUser> UserManager { get; }
 
+        
         /// <summary>
         /// 注册用户
         /// </summary>
         /// <param name="用户注册模型"></param>
         /// <returns></returns>
         [HttpPost("register", Name = nameof(AddUserAsync))]
-        public async Task<IActionResult> AddUserAsync(RegisterUser registerUser)
+        
+        public async Task<IActionResult> AddUserAsync([FromBody]RegisterUser registerUser)
         {
+            
             var user = new IUser
             {
                 UserName = registerUser.UserName,
@@ -65,7 +73,7 @@ namespace RfidAPI.Controllers
         /// <param name="loginUser"></param>
         /// <returns></returns>
         [HttpPost("token2", Name = nameof(GenerateTokenAsync))]
-        public async Task<IActionResult> GenerateTokenAsync(LoginUser loginUser)
+        public async Task<IActionResult> GenerateTokenAsync([FromBody]LoginUser loginUser)
         {
             var user = await UserManager.FindByNameAsync(loginUser.UserName);
             
@@ -94,7 +102,10 @@ namespace RfidAPI.Controllers
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim(JwtRegisteredClaimNames.Email, user.Email)
             };
-            
+            if (user.UserName == "admin1")
+            {
+                claims.Add(new Claim("Admin", "true"));
+            }
             claims.AddRange(userClaims);
 
             var tokenConfigSection = Configuration.GetSection("Security:Token");
@@ -105,7 +116,7 @@ namespace RfidAPI.Controllers
                 issuer: tokenConfigSection["Issuer"],
                 audience: tokenConfigSection["Audience"],
                 claims: claims,
-                expires: DateTime.Now.AddMinutes(55),
+                expires: DateTime.Now.AddMinutes(9999),
                 signingCredentials: signCredential
             );
 
@@ -120,15 +131,81 @@ namespace RfidAPI.Controllers
             
         }
         
-        [Authorize]
-        [HttpGet("info")]
-        public async Task<IUser> GetInfo()
+        
+        public class PersonInfo
         {
-            var name =  HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
-            //var name = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
-            var user = UserManager.FindByNameAsync(name);
-            return await user;
+            public string _userName { get; }
+            //不跟get，接口返回空
+            [Phone]
+            public string _phonenum { get; set; }
+            
+            
+            
+            
+
+            public PersonInfo(string userName, string phonenum)
+            {
+                _userName = userName;
+               
+                _phonenum = phonenum;
+                
+                
+            }
+            
         }
         
+        [Authorize]
+        [HttpGet("info")]
+        public ActionResult<PersonInfo>  GetInfo() //必须ActionResult才能成功返回对象
+        {
+            var name =  HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
+            var user = UserManager.FindByNameAsync(name);
+            
+            //Console.WriteLine(user.Result.UserName);
+            var info = new PersonInfo(user.Result.UserName, user.Result.PhoneNumber);
+            //Console.WriteLine(info._userName);
+            return info;
+        }
+        
+        public class updateInfo
+        {
+            public string gender { get; set; }
+            public string phonenum { get; set; }
+
+            
+
+        }
+        [Authorize]
+        [HttpPost("updateInfo")]
+        public async Task<IdentityResult> EditInfo([FromBody] updateInfo info)
+        {
+            //Console.WriteLine("123");
+            var phonenum = info.phonenum;
+            var gender = info.gender;
+            var name =  HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
+            var user = UserManager.FindByNameAsync(name);
+            /*Console.WriteLine(phonenum);
+            Console.WriteLine(gender);
+            if(phonenum == "") Console.WriteLine("1");
+            if(!string.IsNullOrEmpty(phonenum)) Console.WriteLine("2");*/
+            if(!string.IsNullOrEmpty(phonenum)) user.Result.PhoneNumber = phonenum;
+            var result = await UserManager.UpdateAsync(user.Result);
+            return result;
+
+        }
+
+        [Authorize]
+        [HttpGet("admin")]
+        public ActionResult<bool> isSuperAdmin()
+        {
+            var _isAdmin = HttpContext.User.Claims.FirstOrDefault(c => c.Type == "Admin").Value;
+            if (_isAdmin.Equals("true"))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
     }
 }

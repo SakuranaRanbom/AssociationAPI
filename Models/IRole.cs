@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace RfidAPI.Models
+namespace TeamAPI.Models
 {
     public class IRole : IdentityRole
     {

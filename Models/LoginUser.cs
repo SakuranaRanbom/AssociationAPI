@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace RfidAPI.Models
+namespace TeamAPI.Models
 {
     public class LoginUser
     {

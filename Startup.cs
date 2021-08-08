@@ -12,16 +12,16 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
-using RfidAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Sqlite;
-using RfidAPI.Models;
-using RfidAPI.Service;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using TeamAPI.Data;
+using TeamAPI.Models;
+using TeamAPI.Service;
 
-namespace RfidAPI
+namespace TeamAPI
 {
     public class Startup
     {
@@ -57,14 +57,15 @@ namespace RfidAPI
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo {Title = "RfidAPI", Version = "v1"}); 
-                c.IncludeXmlComments(AppDomain.CurrentDomain.BaseDirectory+"/RfidAPI.xml");
+                c.SwaggerDoc("v1", new OpenApiInfo {Title = "TeamAPI", Version = "v1"}); 
+                //c.IncludeXmlComments(AppDomain.CurrentDomain.BaseDirectory+"/TeamAPI.xml");
             });
             services.AddIdentity<IUser, IRole>()
                 .AddEntityFrameworkStores<LibraryDbContext>();
             var tokenConfigSection = Configuration.GetSection("Security:Token");
             services.AddAuthentication(c =>
                 {
+                    
                     c.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                     c.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
                 })
@@ -87,7 +88,10 @@ namespace RfidAPI
                     };
                 
         });
-            
+            services.AddAuthorization(Options =>
+            {
+                Options.AddPolicy("Admin", policy => policy.RequireClaim("Admin"));
+            });
 
         }
 
@@ -100,7 +104,7 @@ namespace RfidAPI
                 
             }
             app.UseSwagger();
-            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "RfidAPI v1"));
+            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "TeamAPI v1"));
             //app.UseHttpsRedirection();
             app.UseCors("all");//跟上面的字符串一样
             app.UseRouting();

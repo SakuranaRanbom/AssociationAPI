@@ -1,35 +1,118 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using RfidAPI.Models;
-using RfidAPI.Service;
+using TeamAPI.Models;
+using TeamAPI.Service;
 
-namespace RfidAPI.Controllers
+namespace TeamAPI.Controllers
 {
+    
+    
     [Route("team")]
-    [Authorize]
+    
     public class TeamController:ControllerBase
     {
+        
         private readonly TeamService _teamService;
-
-        public TeamController(TeamService teamService)
+        private readonly TeamUserService _teamUserService;
+        private readonly UserManager<IUser> _userManager;
+        public TeamController(TeamService teamService,TeamUserService teamUserService)
         {
             _teamService = teamService;
+            _teamUserService = teamUserService;
         }
         [HttpPost("add")]
-        public ActionResult<string> add(string teamName, string teamInfo, string teamQQ)
+        [Authorize]
+        public ActionResult<string> add([FromBody]SubmitTeam submitTeam)
         {
-            var res = _teamService.CreateTeam(teamName, teamInfo, teamQQ, TeamStatus.not);
-            if (res)
+            if (_teamService.IsTeam(submitTeam.teamName))
             {
-                return "[组织]添加成功";
+                return "[组织]已经存在。请勿重复创建";
+            }
+            else
+            {  
+                bool res2;
+                var userID =  HttpContext.User.Claims.FirstOrDefault(c => c.Type == "jti").Value;
+                var res = _teamService.CreateTeam(submitTeam.teamName, submitTeam.teamInfo, submitTeam.teamQQ, TeamStatus.not);
+                var teamID = _teamService.GetTeamID(submitTeam.teamName);
+                if(teamID != null)
+                {
+                    
+                    res2 = _teamUserService.addUser(userID, teamID.GetValueOrDefault());
+                }
+                else
+                {
+                    res2 = false;
+                }
+
+                if (res && res2)
+                {
+                    return "[组织]添加成功";
+                }
+                else
+                {
+                    return "[组织]添加失败";
+                }
+            }
+           
+        }
+        [HttpGet("all")]
+        [Authorize(Policy = "Admin")]
+        public async Task<ActionResult<IEnumerable<Team>>> getAll()
+        {
+            return await _teamService.getTeams();
+        }
+
+        [HttpGet("getOK")]
+        public async Task<ActionResult<IEnumerable<Team>>> getOK()
+        {
+            return await _teamService.getOKTeams();
+        }
+        
+        [HttpPost("name")]
+        public async Task<ActionResult<IEnumerable<Team>>> getByName([FromBody] string name)
+        {
+            return await _teamService.getTeamByName(name);
+        }
+        [HttpGet("remove")]
+        [Authorize]
+        public ActionResult<string> Remove()
+        {
+            var userID =  HttpContext.User.Claims.FirstOrDefault(c => c.Type == "jti").Value;
+            var teamID = _teamUserService.GetTeamID(userID);
+            if (teamID != null)
+            {
+                var res = _teamService.DeleteTeam(teamID.GetValueOrDefault()) && _teamUserService.deleteUser(userID, teamID.GetValueOrDefault());
+                if (res)
+                {
+                    return "删除成功";
+                }
             }
             else
             {
-                return "[组织]添加失败";
+                return "队伍ID获取为空,失败";
             }
+            return "队伍ID获取为空,失败";
         }
-        
-        
+        [HttpGet("hasteam")]
+        [Authorize]
+        public ActionResult<bool> HasTeam()
+        {
+            var userID =  HttpContext.User.Claims.FirstOrDefault(c => c.Type == "jti").Value;
+            
+            var res = _teamUserService.HasTeam(userID);
+            
+            if (res)
+            {
+                return true;
+            }
+
+            return false;
+        }
         
     }
 }

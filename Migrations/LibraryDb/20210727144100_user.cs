@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace RfidAPI.Migrations.LibraryDb
+namespace TeamAPI.Migrations.LibraryDb
 {
     public partial class user : Migration
     {

@@ -1,4 +1,6 @@
-﻿namespace RfidAPI.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace TeamAPI.Models
 {
 
     public enum PerLevel
@@ -10,8 +12,8 @@
     
     public class TeamUser
     {
-        
-        public string? TeamUserID { get; set; }
+        [Key]
+        public int? TeamUserID { get; set; }
         
         public string UserID { get; set; }
         

@@ -7,9 +7,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using RfidAPI.Models;
+using TeamAPI.Models;
 
-namespace RfidAPI.Controllers
+namespace TeamAPI.Controllers
 {
     public class HomeController : ControllerBase
     {

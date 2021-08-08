@@ -1,8 +1,8 @@
 ﻿
 using Microsoft.EntityFrameworkCore;
-using RfidAPI.Models;
+using TeamAPI.Models;
 
-namespace RfidAPI.Data
+namespace TeamAPI.Data
 {
     public class DataContext : DbContext 
     {
