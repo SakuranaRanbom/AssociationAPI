@@ -16,6 +16,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Sqlite;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using TeamAPI.Data;
 using TeamAPI.Models;
@@ -45,6 +46,7 @@ namespace TeamAPI
             
             services.AddScoped<TeamService, TeamServiceImpl>();
             services.AddScoped<TeamUserService, TeamUserServiceImpl>();
+            
             services.AddCors(c =>
             {
                 c.AddPolicy("all", builder =>
@@ -60,7 +62,12 @@ namespace TeamAPI
                 c.SwaggerDoc("v1", new OpenApiInfo {Title = "TeamAPI", Version = "v1"}); 
                 //c.IncludeXmlComments(AppDomain.CurrentDomain.BaseDirectory+"/TeamAPI.xml");
             });
-            services.AddIdentity<IUser, IRole>()
+            services.AddIdentity<IUser, IRole>(options => { options.Password.RequireDigit = false;
+                    options.Password.RequireNonAlphanumeric = false;
+                    options.Password.RequireLowercase = false;
+                    options.Password.RequireUppercase = false;
+                    options.Password.RequiredLength = 6;
+                })
                 .AddEntityFrameworkStores<LibraryDbContext>();
             var tokenConfigSection = Configuration.GetSection("Security:Token");
             services.AddAuthentication(c =>
