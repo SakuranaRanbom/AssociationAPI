@@ -139,5 +139,27 @@ namespace TeamAPI.Service
                 return null;
             }
         }
+        public bool SwitchTeamStatus(string teamName)
+        {
+            var team = _dataContext.Teams.SingleOrDefault(s => s.teamName.Equals(teamName));
+            if (team == null)
+            {
+                return false;
+            }
+            else
+            {
+                team.status = team.status == TeamStatus.not ? TeamStatus.ok : TeamStatus.not;
+            }
+
+            if (_dataContext.SaveChanges() > 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+            throw new System.NotImplementedException();
+        }
     }
 }

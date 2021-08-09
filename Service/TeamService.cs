@@ -20,5 +20,7 @@ namespace TeamAPI.Service
         Task<ActionResult<IEnumerable<Team>>> getTeamByName(string name);
 
         int? GetTeamID(string teamName);
+        
+        bool SwitchTeamStatus(string teamName);
     }
 }

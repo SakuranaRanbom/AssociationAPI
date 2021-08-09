@@ -113,6 +113,21 @@ namespace TeamAPI.Controllers
 
             return false;
         }
+        [HttpGet("switch")]
+        [Authorize(Policy = "Admin")]
+        public ActionResult<bool> SwitchStatus([FromQuery]string teamName)
+        {
+           // Console.WriteLine(teamName);
+           var res = _teamService.SwitchTeamStatus(teamName);
+           if (res)
+           {
+               return true;
+           }
+           else
+           {
+               return false;
+           }
+        }
         
     }
 }
