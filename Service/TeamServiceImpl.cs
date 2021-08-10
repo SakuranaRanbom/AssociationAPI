@@ -124,9 +124,13 @@ namespace TeamAPI.Service
         }
         public async Task<ActionResult<IEnumerable<Team>>> getTeamByName(string name)
         {
-            return await _dataContext.Teams.Where(b => b.teamName.Contains(name)).ToListAsync();
+            return await _dataContext.Teams.Where(b => b.teamName.Contains(name) && b.status == TeamStatus.ok).ToListAsync();
         }
 
+        public async Task<ActionResult<IEnumerable<Team>>> getTeamByInfo(string info)
+        {
+            return await _dataContext.Teams.Where(b => b.teamInfo.Contains(info) && b.status == TeamStatus.ok).ToListAsync();
+        }
         public int? GetTeamID(string teamName)
         {
             var res = _dataContext.Teams.FirstOrDefault(s => s.teamName.Equals(teamName));

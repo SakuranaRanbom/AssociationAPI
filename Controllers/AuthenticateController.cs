@@ -207,5 +207,30 @@ namespace TeamAPI.Controllers
             return false;
         }
 
+        [Authorize]
+        [HttpPost("changepassword")]
+        public async Task<bool> ChangePassword([FromForm] string CurrentPassword,[FromForm]string NewPassword)
+        {
+            if (CurrentPassword == null || NewPassword == null || CurrentPassword == "" || NewPassword == "")
+            {
+                return false;
+            }
+            else
+            {
+                var id =  HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
+                var user = UserManager.FindByNameAsync(id);
+                var res  =await UserManager.ChangePasswordAsync(user.Result, CurrentPassword, NewPassword);
+                if (res.Succeeded)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            
+        }
+
     }
 }

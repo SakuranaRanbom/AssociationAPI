@@ -18,6 +18,8 @@ namespace TeamAPI.Service
         Task<ActionResult<IEnumerable<Team>>> getTeams();
         Task<ActionResult<IEnumerable<Team>>> getOKTeams();
         Task<ActionResult<IEnumerable<Team>>> getTeamByName(string name);
+        
+        Task<ActionResult<IEnumerable<Team>>> getTeamByInfo(string info);
 
         int? GetTeamID(string teamName);
         

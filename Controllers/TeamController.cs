@@ -73,10 +73,17 @@ namespace TeamAPI.Controllers
             return await _teamService.getOKTeams();
         }
         
-        [HttpPost("name")]
-        public async Task<ActionResult<IEnumerable<Team>>> getByName([FromBody] string name)
+        [HttpGet("name")]
+        public async Task<ActionResult<IEnumerable<Team>>> getByName([FromQuery] string name)
         {
             return await _teamService.getTeamByName(name);
+        }
+        
+        
+        [HttpGet("info")]
+        public async Task<ActionResult<IEnumerable<Team>>> getByInfo([FromQuery] string info)
+        {
+            return await _teamService.getTeamByInfo(info);
         }
         [HttpGet("remove")]
         [Authorize]
