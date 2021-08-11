@@ -149,7 +149,6 @@ namespace TeamAPI.Service
         {
             
             var res =  _context.TeamUsers.FirstOrDefault(s => s.UserID == userID);
-           
             if (res == null)
             {
                

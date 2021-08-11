@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Net;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
@@ -100,7 +101,8 @@ namespace TeamAPI.Controllers
             {
                 new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim(JwtRegisteredClaimNames.Email, user.Email)
+                new Claim(JwtRegisteredClaimNames.Email, user.Email),
+                new Claim("UserID", user.Id)
             };
             if (user.UserName == "admin1")
             {
@@ -158,6 +160,7 @@ namespace TeamAPI.Controllers
         [HttpGet("info")]
         public ActionResult<PersonInfo>  GetInfo() //必须ActionResult才能成功返回对象
         {
+            
             var name =  HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
             var user = UserManager.FindByNameAsync(name);
             

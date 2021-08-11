@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -36,7 +37,7 @@ namespace TeamAPI.Controllers
             else
             {  
                 bool res2;
-                var userID =  HttpContext.User.Claims.FirstOrDefault(c => c.Type == "jti").Value;
+                var userID = HttpContext.User.Claims.FirstOrDefault(c => c.Type == "UserID").Value;
                 var res = _teamService.CreateTeam(submitTeam.teamName, submitTeam.teamInfo, submitTeam.teamQQ, TeamStatus.not);
                 var teamID = _teamService.GetTeamID(submitTeam.teamName);
                 if(teamID != null)
@@ -89,7 +90,7 @@ namespace TeamAPI.Controllers
         [Authorize]
         public ActionResult<string> Remove()
         {
-            var userID =  HttpContext.User.Claims.FirstOrDefault(c => c.Type == "jti").Value;
+            var userID =  HttpContext.User.Claims.FirstOrDefault(c => c.Type == "UserID").Value;
             var teamID = _teamUserService.GetTeamID(userID);
             if (teamID != null)
             {
@@ -109,10 +110,15 @@ namespace TeamAPI.Controllers
         [Authorize]
         public ActionResult<bool> HasTeam()
         {
-            var userID =  HttpContext.User.Claims.FirstOrDefault(c => c.Type == "jti").Value;
+            /*var userID =  HttpContext.User.Claims.AsEnumerable();
+            Console.WriteLine(userID.ToString());
+            foreach (var VARIABLE in userID)
+            {
+                Console.WriteLine(VARIABLE.Type + VARIABLE.Value);
+            }*/
             
+            var userID = HttpContext.User.Claims.FirstOrDefault(c => c.Type == "UserID").Value;
             var res = _teamUserService.HasTeam(userID);
-            
             if (res)
             {
                 return true;
