@@ -3,7 +3,7 @@
 <h1 align="center">
 </h1>
 
-<a href="[Actions · SakuranaRanbom/AssociationAPI (github.com)](https://github.com/SakuranaRanbom/AssociationAPI/actions)">![status](https://img.shields.io/github/workflow/status/SakuranaRanbom/AssociationAPI/CI?style=for-the-badge)</a>
+<a href="https://github.com/SakuranaRanbom/AssociationAPI/actions">![status](https://github.com/SakuranaRanbom/AssociationAPI/actions/workflows/dotnet.yml/badge.svg)</a>
 
 ![platform](https://img.shields.io/badge/platform-win--x64%20%7C%20linux--x64%20%7C%20linux--arm%20%7C%20win--arm-green?style=for-the-badge)
 
